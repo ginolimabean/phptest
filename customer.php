@@ -1,22 +1,4 @@
-<?php
-
-	//DATABASE CONNECTION - OPEN
-	//DB connection variables
-	$servername = "localhost";
-	$username 	= "root";
-	$password	= "";
-	$dbname		= "dvd_shop";
-
-	//DB connection
-	$conn = new mysqli($servername, $username, $password, $dbname); 
-
-	//Check connection
-	if($conn->connect_error){
-		die ("Connection Failed:" . $conn->connect_error . "<br>");
-		}
-	// echo "Connected Successfully <br>";
-
-?>
+<?php require('database.php'); ?>
 
 <?php
 	//DATABASE QUERY - SELECT
@@ -30,12 +12,34 @@
 
 	//Catch SQL Query Result
 	$result = $conn->query($select_all_customers);
-	var_dump($_POST);
-
+	// var_dump($_POST);
 ?>
-<?php //Use Result, test if any by using $result->num_rows>0, and loop through to output data ?>
+
+<?php 
+	//Display message from edit_customer or add_customer
+	
+	if(isset($_GET["message"])){
+		if($_GET["message"]==1)
+		{
+			echo "Customer successfully updated.";
+		}
+		else if($_GET["message"]==2)
+		{
+			echo "Customer successfully deleted from database.";
+		}
+		else if($_GET["message"]==3)
+			echo "Customer successfully deleted from database.";
+	}
+	else
+	{
+		echo "";
+	}
+
+
+	//Use Result, test if any by using $result->num_rows>0, and loop through to output data ?>
+	<?php require('header.php'); ?>
 	<!-- Create table for output -->
-	<table width="100%" border="1">
+	<table width="100%" border="1" style="border-style: solid;">
 		<thead>
 			<tr>
 				<td>id</td>
@@ -61,7 +65,10 @@
 						<td><?php echo $row["email"]; ?></td>
 						<td><?php echo $row["sa_id_number"]; ?></td>
 						<td><?php echo $row["address"]; ?></td>
-						<td><a href="edit_customer.php?id=<?php echo $row["id"] ;?>">edit</a></td>	<!-- edit pass id to prepopulate and edit in form -->
+						<td>
+							<a href="edit_customer.php?id=<?php echo $row["id"] ;?>">edit</a>
+							<a href="delete_customer.php?id=<?php echo $row["id"] ;?>">delete</a>
+						</td>	<!-- edit pass id to prepopulate and edit in form -->
 					</tr>
 				<?php 
 				}															// Close loop
@@ -69,10 +76,14 @@
 			?>
 		</tbody>
 	</table>
+	<br>
+	<form action="add_customer.php">
+	    <a href=add_customer.php><input type="button" value="Add customer"></a>
+	</form>
 
+	
+	<?php 
+	require('footer.php');
+	require('database_close.php'); 
+	?>
 
-
-<?php
-	//DATABASE CONNECTION - CLOSE
-	$conn->close();
-?>

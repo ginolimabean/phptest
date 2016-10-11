@@ -1,27 +1,14 @@
 <?php
-	require_once("functions.php") 
+	require('database.php');
+	require_once("functions.php");
+	require_once("validation_functions.php");
 ?>
-<?php
 
-	//DATABASE CONNECTION - OPEN
-	//DB connection variables
-	$servername = "localhost";
-	$username 	= "root";
-	$password	= "";
-	$dbname		= "dvd_shop";
-
-	//DB connection
-	$conn = new mysqli($servername, $username, $password, $dbname); 
-
-	//Check connection
-	if($conn->connect_error){
-		die ("Connection Failed:" . $conn->connect_error . "<br>");
-		}
-	// echo "Connected Successfully <br>";
-
-?>
 
 <?php 	//FORM PROCESSING
+	$errors = array();
+
+
 	if(isset($_POST["submit"])){
 		$id 					= "";
 		$posted_id 				= $_POST["id"];
@@ -31,6 +18,15 @@
 		$posted_email 			= $_POST["email"];
 		$posted_sa_id_number 	= $_POST["sa_id_number"];
 		$posted_address 		= $_POST["address"];
+		// $message;
+
+		//Escape all strings
+		$posted_name 			= mysqli_real_escape_string($conn, $posted_name);
+		$posted_surname 		= mysqli_real_escape_string($conn, $posted_surname);
+		$posted_contact_number 	= mysqli_real_escape_string($conn, $posted_contact_number);
+		$posted_email 			= mysqli_real_escape_string($conn, $posted_email);
+		$posted_sa_id_number 	= mysqli_real_escape_string($conn, $posted_sa_id_number);
+		$posted_address 		= mysqli_real_escape_string($conn, $posted_address);
 
 		$name 					= "";
 		$surname 				= "";
@@ -39,28 +35,43 @@
 		$sa_id_number 			= "";
 		$address 				= "";
 
-		$update_customer_query 	= "UPDATE customers SET ";
-		$update_customer_query .= "name ='$posted_name', ";
-		$update_customer_query .= "surname ='$posted_surname', ";
-		$update_customer_query .= "contact_number ='$posted_contact_number', ";
-		$update_customer_query .= "email ='$posted_email', ";
-		$update_customer_query .= "sa_id_number ='$posted_sa_id_number', ";
-		$update_customer_query .= "address ='$posted_address' ";
-		$update_customer_query .= "WHERE id = $posted_id ";
+		//Validation of non blank values (presence validation)
+		
 
-		echo $update_customer_query;
-		var_dump($_POST);
-
-		if($conn->query($update_customer_query)===TRUE){
-			redirect_to_with_get("customer.php","message","1");
-			// echo "Record Updated Successfully";
-		}
-		else
+		$fields_required = array("id","name","surname","contact_number","email","sa_id_number","address");
+		
+		foreach ($fields_required as $field)
 		{
-			echo "Error Updating record: " . $conn->error;
+			$value = trim($_POST[$field]);
+			if(!has_presence($value))
+			{
+				$errors[$field] = ucfirst($field) . " can't be blank.<br>";
+			}
 		}
 
+		//Try update if no errors
+		if(empty($errors)){
+			$update_customer_query 	= "UPDATE customers SET ";
+			$update_customer_query .= "name ='$posted_name', ";
+			$update_customer_query .= "surname ='$posted_surname', ";
+			$update_customer_query .= "contact_number ='$posted_contact_number', ";
+			$update_customer_query .= "email ='$posted_email', ";
+			$update_customer_query .= "sa_id_number ='$posted_sa_id_number', ";
+			$update_customer_query .= "address ='$posted_address' ";
+			$update_customer_query .= "WHERE id = $posted_id;";
 
+			echo $update_customer_query;
+			var_dump($_POST);
+
+			if($conn->query($update_customer_query)===TRUE){
+				redirect_to_with_get("customer.php","message","1");
+				// echo "Record Updated Successfully";
+			}
+			else
+			{
+				echo "Error Updating record: " . $conn->error;
+			}
+		}
 	}
 	else {
 		$id 					= $_GET["id"];
@@ -80,7 +91,7 @@
 		//$id = $_GET["id"];					decalre and set when checking if POST isset or from edit url link in customer.php
 		$select_customer  = "SELECT * ";
 		$select_customer .= "from customers ";
-		$select_customer .= "WHERE id = $id";
+		$select_customer .= 'WHERE id = ' . $id;
 		// $select_customer .= "ORDER BY surname;";
 		// echo $select_customer;		//echo to view sql query string for debugging
 
@@ -100,9 +111,10 @@
 	}
 ?>
 
-<?php
+<?php require('header.php'); ?>
 
-?>
+<?php //echo $message; ?>	<!--//Display log in $message-->
+<?php echo form_errors($errors); ?>	<!--//Display errors assoc_array-->
 
 
 <form action="edit_customer.php" method="post">
@@ -142,8 +154,7 @@
 </form>
 
 
-
-<?php
-	//DATABASE CONNECTION - CLOSE
-	$conn->close();
+<?php 
+	require('footer.php');
+	require('database_close.php'); 
 ?>
