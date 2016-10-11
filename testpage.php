@@ -30,7 +30,7 @@
 					while($row = $result->fetch_assoc())
 					{
 					 	$row_data = array(
-							"id"			=>$row["id"],
+							"id"=>$row["id"],
 							"name"			=>$row["name"],
 							"surname"		=>$row["surname"],
 							"contact_number"=>$row["contact_number"],
@@ -48,18 +48,22 @@
 			}
 		}
 
-
 		public function update($query)
 		{
-
+			$result=$this->conn->query($query);
+			if($result)
+			{
+				return true;
+			}
 		}
 		
 	}
 
 
 	$db = new mysql_database('localhost','root','','dvd_shop');
-	$query = "SELECT * FROM customers;";
+	$query1 = "SELECT * FROM customers;";
 	// $query = "SELECT * FROM customers";
-	var_dump($db->fetch($query));
+	$query2 = "UPDATE customers SET surname='Starke' where id=2;";
+	var_dump($db->update($query2));
 
 ?>

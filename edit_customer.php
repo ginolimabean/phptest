@@ -98,8 +98,10 @@
 		//Catch SQL Query Result
 		$get_customer_result = $conn->query($select_customer);
 
-		if($get_customer_result->num_rows>0){
-			while($row = $get_customer_result->fetch_assoc()){
+		if($get_customer_result->num_rows>0)
+		{
+			while($row = $get_customer_result->fetch_assoc())
+			{
 				$name = $row["name"];
 				$surname = $row["surname"];
 				$contact_number = $row["contact_number"];

@@ -1,5 +1,7 @@
 <?php require('database.php'); ?>
 
+<?php $conn = new mysqli('localhost', 'root', '', 'dvd_shop'); ?>
+
 <?php
 	//DATABASE QUERY - SELECT
 
