@@ -2,6 +2,8 @@
 	require('database.php');
 	require_once("functions.php");
 	require_once("validation_functions.php");
+
+	$conn = new mysql_database('localhost','root','','dvd_shop');
 ?>
 <?php
 

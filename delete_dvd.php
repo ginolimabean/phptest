@@ -10,22 +10,22 @@
 	{
 		$id = $_GET["id"];
 
-		$delete_customer_query = "DELETE FROM customers WHERE id=" . $id;
+		$delete_dvd_query = "DELETE FROM dvds WHERE id=" . $id;
 
-		if($conn->query($delete_customer_query)===TRUE)
+		if($conn->conn->query($delete_dvd_query)===TRUE)
 		{
-			redirect_to_with_get("customer.php","message","3");
+			redirect_to_with_get("dvd.php","message","3");
 			// echo "Record Updated Successfully";
 		}
 		else
 		{
-			echo "Error Deleting Record: " . $conn->error;
+			echo "Error Deleting Record: " . $conn->conn->error;
 		}
 
 	}
 	else
 	{
-		echo "Customer entry to be deleted not selected from customers page";
+		echo "DVD entry to be deleted not selected from customers page";
 	}
 
 ?>

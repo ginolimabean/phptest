@@ -2,7 +2,7 @@
 	
 	class mysql_database
 	{
-		private $conn;
+		public $conn;
 
 
 		public function __construct($servername, $username, $password, $dbname)
@@ -27,6 +27,7 @@
 			{
 				if($result->num_rows>0)
 				{
+					$all_row_data = array();
 					while($row = $result->fetch_assoc())
 					{
 					 	$row_data = array(
@@ -38,8 +39,9 @@
 							"sa_id_number"	=>$row["sa_id_number"],
 							"address"		=>$row["address"]
 							);
-						return $row_data;
+					 	$all_row_data[] = $row_data;
 					}
+					return $all_row_data;
 				}
 			}
 			else
@@ -51,15 +53,95 @@
 
 		public function update($query)
 		{
+			$result=$this->conn->query($query);
+			if($result)
+			{
+				return true;
+			}
+		}
 
+
+		public function fetch_dvd($query)
+		{
+			$result=$this->conn->query($query);
+			if($result)
+			{
+				if($result->num_rows>0)
+				{
+					$all_row_data = array();
+					while($row = $result->fetch_assoc())
+					{
+					 	$row_data = array(
+							"id"			=>$row["id"],
+							"category_id"	=>$row["category_id"],
+							"name"			=>$row["name"],
+							"description"	=>$row["description"],
+							"release_date"	=>$row["release_date"],
+							);
+					 	$all_row_data[] = $row_data;
+					}
+					return $all_row_data;
+				}
+			}
+			else
+			{
+				echo "Error Fetching query: " . $this->conn->error;
+			}
+		}
+
+
+
+		public function fetch_dvd_join($query)
+		{
+			$result=$this->conn->query($query);
+			if($result)
+			{
+				if($result->num_rows>0)
+				{
+					$all_row_data = array();
+					while($row = $result->fetch_assoc())
+					{
+					 	$row_data = array(
+							"id"			=>$row["id"],
+							"category_id"	=>$row["category_id"],
+							"name"			=>$row["name"],
+							"description"	=>$row["description"],
+							"release_date"	=>$row["release_date"],
+							"category_name"	=>$row["category_name"]
+							);
+					 	$all_row_data[] = $row_data;
+					}
+					return $all_row_data;
+				}
+			}
+			else
+			{
+				echo "Error Fetching query: " . $this->conn->error;
+			}
+		}
+
+		public function update_dvd($query)
+		{
+			$result=$this->conn->query($query);
+			if($result)
+			{
+				return true;
+			}
+		}
+
+		public function close()
+		{
+			$this->conn->close();
 		}
 		
 	}
 
 
-	$db = new mysql_database('localhost','root','','dvd_shop');
-	$query = "SELECT * FROM customers;";
+	// $conn = new mysql_database('localhost','root','','dvd_shop');
+	// $query1 = "SELECT * FROM customers;";
 	// $query = "SELECT * FROM customers";
-	var_dump($db->fetch($query));
+	// $query2 = "UPDATE customers SET surname='Starke' where id=2;";
+	// var_dump($db->fetch($query1));
+	// var_dump($db->update($query2));
 
 ?>

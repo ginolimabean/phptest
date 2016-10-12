@@ -7,29 +7,33 @@
 	//DATABASE QUERY - SELECT
 
 	//Build SQL Query
-	$select_all_customers  = "SELECT * ";
-	$select_all_customers .= "from customers ";
+	$select_all_dvds  = "SELECT dvds.id, dvds.category_id, dvds.name, dvds.description, dvds.release_date, category.category_name ";
+	$select_all_dvds .= "from dvds ";
+	$select_all_dvds .= "LEFT JOIN category ";
+	$select_all_dvds .= "on dvds.category_id = category.id ";
+
 	// echo $select_all_customers;		//echo to view sql query string for debugging
 	//Catch SQL Query Result
-	$results = $conn->fetch($select_all_customers);
+	$results = $conn->fetch_dvd_join($select_all_dvds);
 	// var_dump($results);
-	// break;
+	// exit;
 ?>
 
 <?php 
-	//Display message from edit_customer or add_customer
+	//Display message from edit_dvd or add_dvd
 	
-	if(isset($_GET["message"])){
+	if(isset($_GET["message"]))
+	{
 		if($_GET["message"]==1)
 		{
-			echo "Customer successfully updated.";
+			echo "DVD successfully updated.";
 		}
 		else if($_GET["message"]==2)
 		{
-			echo "Customer successfully added to database.";
+			echo "DVD successfully added to database.";
 		}
 		else if($_GET["message"]==3)
-			echo "Customer successfully deleted from database.";
+			echo "DVD successfully deleted from database.";
 	}
 	else
 	{
@@ -44,12 +48,10 @@
 		<thead>
 			<tr>
 				<td>id</td>
+				<td>category</td>
 				<td>name</td>
-				<td>surname</td>
-				<td>contact_number</td>
-				<td>email</td>
-				<td>sa_id_number</td>
-				<td>address</td>
+				<td>descrption</td>
+				<td>release_date</td>
 				<td>Actions</td>
 			</tr>
 		</thead>
@@ -62,15 +64,13 @@
 			?>
 					<tr>
 						<td><?php echo $result["id"]; ?></td>					
+						<td><?php echo $result["category_name"]; ?></td>
 						<td><?php echo $result["name"]; ?></td>
-						<td><?php echo $result["surname"]; ?></td>
-						<td><?php echo $result["contact_number"]; ?></td>
-						<td><?php echo $result["email"]; ?></td>
-						<td><?php echo $result["sa_id_number"]; ?></td>
-						<td><?php echo $result["address"]; ?></td>
+						<td><?php echo $result["description"]; ?></td>
+						<td><?php echo $result["release_date"]; ?></td>
 						<td>
-							<a href="edit_customer.php?id=<?php echo $result["id"] ;?>">edit</a>
-							<a href="delete_customer.php?id=<?php echo $result["id"] ;?>">delete</a>
+							<a href="edit_dvd.php?id=<?php echo $result["id"] ;?>">edit</a>
+							<a href="delete_dvd.php?id=<?php echo $result["id"] ;?>">delete</a>
 						</td>	<!-- edit pass id to prepopulate and edit in form -->
 					</tr>
 			<?php
@@ -81,8 +81,8 @@
 		</tbody>
 	</table>
 	<br>
-	<form action="add_customer.php">
-	    <a href=add_customer.php><input type="button" value="Add customer"></a>
+	<form action="add_dvd.php">
+	    <a href=add_dvd.php><input type="button" value="Add dvd"></a>
 	</form>
 
 	
@@ -90,4 +90,3 @@
 	require('footer.php');
 	require('database_close.php'); 
 	?>
-

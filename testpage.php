@@ -15,7 +15,7 @@
 				die ("Connection Failed: " . $conn->connect_error);
 			}
 			//echo "db connected";
-			$this->conn = $conn;
+			return $this->conn = $conn;
 		}
 
 		public function fetch($query)
@@ -55,6 +55,10 @@
 			{
 				return true;
 			}
+			else
+			{
+				echo "Error Updating Query: " . $this->conn->error;
+			}
 		}
 		
 	}
@@ -64,6 +68,6 @@
 	$query1 = "SELECT * FROM customers;";
 	// $query = "SELECT * FROM customers";
 	$query2 = "UPDATE customers SET surname='Starke' where id=2;";
-	var_dump($db->update($query2));
+	var_dump($db->fetch($query1));
 
 ?>
