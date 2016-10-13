@@ -70,7 +70,7 @@
 		</tr>
 		<tr>
 			<td>release_date: </td>
-			<td><input type="text" name="release_date" value=""></td>
+			<td><input type="date" name="release_date" value=""></td>
 		</tr>
 		<tr>
 			<td><input type="Submit" name="submit" value="Submit"></td>

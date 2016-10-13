@@ -13,7 +13,7 @@
 	//Catch SQL Query Result
 	$results = $conn->fetch($select_all_customers);
 	// var_dump($results);
-	// break;
+	// exit;
 ?>
 
 <?php 

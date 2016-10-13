@@ -27,15 +27,15 @@
 		//Inserting records (CREATE) in the form of values in $_POST
 		//	2. Perform database query
 		$add_customer_query  = "INSERT INTO customers (";							
-		$add_customer_query .= "	name, surname, contact_number, email, sa_id_number, address";
+		$add_customer_query .= "name, surname, contact_number, email, sa_id_number, address";
 		$add_customer_query .= ") VALUES (";
 		$add_customer_query .= "'" 	. $name ."','"
-						. $surname ."','" 
-						. $contact_number . "','" 
-						. $email . "','" 
-						. $sa_id_number ."','" 
-						. $address 
-				. "'";
+							. $surname ."','" 
+							. $contact_number . "','" 
+							. $email . "','" 
+							. $sa_id_number ."','" 
+							. $address 
+							. "'";
 		$add_customer_query .= ");";
 		
 		if($conn->query($add_customer_query)===TRUE)
